@@ -7,7 +7,7 @@ The application serves as a **"living system"** that guides a patient through re
 
 ---
 
-## ✨ Features Implemented (All 8 Required Screens)
+##  Features Implemented (All 8 Required Screens)
 
 1. **Symptom Input**: Interactive body map and guided symptom selection with a pain severity slider.
 2. **Doctor Discovery**: Smart doctor suggestions based on selected symptoms, including specialty filters and AI match scores.
@@ -20,14 +20,14 @@ The application serves as a **"living system"** that guides a patient through re
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 - **React.js** (Bootstrapped with Vite for fast builds)
 - **Tailwind CSS** (Utility-first framework for precise, responsive styling)
 - **React Router DOM** (For seamless, single-page client-side navigation)
 - **Lucide React** (For modern, clean SVG iconography)
 
 
-## 🎨 Design System
+##  Design System
 - **Primary Color**: Calm Teal/Blue (`#2B92B1`) — Chosen for its calming, trustworthy, and accessible properties in healthcare.
 - **Typography**: Clean Sans-serif — Optimized for readability, especially for first-time smartphone users.
 - **Structure**: Card-based layouts with soft shadows and clear visual hierarchy to reduce cognitive load.
