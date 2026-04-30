@@ -1,4 +1,4 @@
-# 🏥 MediCare - Living Patient Appointment Experience
+# Mugisha Isaie MediCare - Living Patient Appointment Experience
 
 ## Overview
 This is a mobile-first, highly interactive patient appointment web application built using **React.js (Vite)** and **Tailwind CSS**. It was designed and developed to fulfill the requirements of the Front-End Development Summative Assessment.
@@ -26,26 +26,6 @@ The application serves as a **"living system"** that guides a patient through re
 - **React Router DOM** (For seamless, single-page client-side navigation)
 - **Lucide React** (For modern, clean SVG iconography)
 
----
-
-## 🚀 How to Run Locally
-
-1. **Install dependencies**
-   Make sure you have Node.js installed. Run:
-   ```bash
-   npm install
-   ```
-
-2. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-3. **View the app**
-   Open your browser and navigate to `http://localhost:5173`. 
-   *(Note: For the best experience, view it using responsive design mode in your browser DevTools, mimicking a mobile device).*
-
----
 
 ## 🎨 Design System
 - **Primary Color**: Calm Teal/Blue (`#2B92B1`) — Chosen for its calming, trustworthy, and accessible properties in healthcare.
@@ -53,6 +33,6 @@ The application serves as a **"living system"** that guides a patient through re
 - **Structure**: Card-based layouts with soft shadows and clear visual hierarchy to reduce cognitive load.
 - **Animations**: Soft state transitions and interactive micro-animations to make the app feel "alive" and responsive to user actions.
 
----
 
-**Developed by:** [Your Name / Registration Number]
+
+**Developed by:** [Mugisha Isaie / 25RP02085]
