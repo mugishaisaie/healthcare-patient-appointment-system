@@ -7,7 +7,9 @@ The application serves as a **"living system"** that guides a patient through re
 
 ---
 
-##  Features Implemented (All 8 Required Screens)
+## 
+
+ Features Implemented (All 8 Required Screens)
 
 1. **Symptom Input**: Interactive body map and guided symptom selection with a pain severity slider.
 2. **Doctor Discovery**: Smart doctor suggestions based on selected symptoms, including specialty filters and AI match scores.
