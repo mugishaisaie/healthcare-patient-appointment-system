@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #eaf4f7;
+  --color-primary-100: #d4eaf0;
+  --color-primary-500: #2b92b1;
+  --color-primary-600: #237a94;
+  --color-primary-700: #1b6177;
+  --color-primary-900: #103d4c;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-slate-800 font-sans antialiased;
+  }
+}
+
+/* Custom scrollbar to make the app look clean on mobile */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
