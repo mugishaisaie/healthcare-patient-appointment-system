@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, MoreHorizontal } from 'lucide-react';
 
 export default function LiveWaiting() {
   const navigate = useNavigate();
+  const [notifyEnabled, setNotifyEnabled] = useState(false);
 
   return (
     <div className="h-full bg-gray-50 flex flex-col font-sans relative">
@@ -56,15 +58,28 @@ export default function LiveWaiting() {
 
         <div className="bg-yellow-50 rounded-2xl p-4 border border-yellow-200 text-center">
           <p className="text-sm font-bold text-yellow-800 mb-1">Need to step out?</p>
-          <p className="text-xs text-yellow-700">We'll notify you 2 mins before your turn</p>
+          <p className="text-xs text-yellow-700">
+            {notifyEnabled ? "You're all set — we'll notify you 2 mins before your turn." : 'Enable notifications to get a 2-minute reminder.'}
+          </p>
         </div>
       </div>
 
       <div className="p-4 bg-white border-t border-gray-100 absolute bottom-0 w-full z-10 text-center">
-        <button onClick={() => navigate('/summary')} className="w-full bg-white border-2 border-primary-500 text-primary-600 py-3.5 rounded-xl font-bold shadow-sm mb-2">
-          Notify me when it is my turn
+        <button
+          onClick={() => setNotifyEnabled((prev) => !prev)}
+          className="w-full bg-white border-2 border-primary-500 text-primary-600 py-3.5 rounded-xl font-bold shadow-sm mb-2"
+        >
+          {notifyEnabled ? 'Notifications enabled' : 'Notify me when it is my turn'}
         </button>
-        <p className="text-[10px] text-gray-400">Dr is on schedule. Wait inside clinic.</p>
+        <button
+          onClick={() => navigate('/summary')}
+          className="w-full text-xs font-semibold text-primary-600 mb-2"
+        >
+          Continue to visit summary
+        </button>
+        <p className="text-[10px] text-gray-400">
+          {notifyEnabled ? 'We will alert you before your turn.' : 'Dr is on schedule. Wait inside clinic.'}
+        </p>
       </div>
     </div>
   );

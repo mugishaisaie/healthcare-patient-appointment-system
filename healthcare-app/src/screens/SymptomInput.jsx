@@ -5,10 +5,23 @@ export default function SymptomInput() {
   const navigate = useNavigate();
   const [symptoms, setSymptoms] = useState(['Headache', 'Fever']);
   const [intensity, setIntensity] = useState(5);
+  const [selectedAreas, setSelectedAreas] = useState(['Head']);
+  const bodyAreas = [
+    { label: 'Head', size: 'w-16 h-12', position: 'absolute top-4', text: 'text-xs' },
+    { label: 'L-Arm', size: 'w-10 h-24', position: 'absolute top-18 left-[60px]', text: 'text-[10px]' },
+    { label: 'Chest', size: 'w-24 h-16', position: 'absolute top-18', text: 'text-xs' },
+    { label: 'R-Arm', size: 'w-10 h-24', position: 'absolute top-18 right-[60px]', text: 'text-[10px]' },
+    { label: 'Stomach', size: 'w-24 h-12', position: 'absolute bottom-6', text: 'text-xs' }
+  ];
 
   const toggleSymptom = (s) => {
     if (symptoms.includes(s)) setSymptoms(symptoms.filter(x => x !== s));
     else setSymptoms([...symptoms, s]);
+  };
+  const toggleArea = (area) => {
+    setSelectedAreas((prev) =>
+      prev.includes(area) ? prev.filter((item) => item !== area) : [...prev, area]
+    );
   };
 
   return (
@@ -25,11 +38,21 @@ export default function SymptomInput() {
           <p className="text-sm text-gray-500 mb-4">Tap a body area to get started.</p>
           
           <div className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center justify-center relative h-[200px]">
-             <div className="w-16 h-12 bg-primary-500 text-white rounded-lg flex items-center justify-center text-xs font-bold absolute top-4 shadow-sm">Head ✓</div>
-             <div className="w-10 h-24 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-[10px] font-bold absolute top-18 left-[60px] shadow-sm">L-Arm</div>
-             <div className="w-24 h-16 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs font-bold absolute top-18 shadow-sm">Chest</div>
-             <div className="w-10 h-24 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-[10px] font-bold absolute top-18 right-[60px] shadow-sm">R-Arm</div>
-             <div className="w-24 h-12 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs font-bold absolute bottom-6 shadow-sm">Stomach</div>
+            {bodyAreas.map((area) => {
+              const isSelected = selectedAreas.includes(area.label);
+              return (
+                <button
+                  key={area.label}
+                  type="button"
+                  onClick={() => toggleArea(area.label)}
+                  className={`${area.size} ${area.position} ${area.text} rounded-lg flex items-center justify-center font-bold shadow-sm ${
+                    isSelected ? 'bg-primary-500 text-white' : 'bg-primary-100 text-primary-600'
+                  }`}
+                >
+                  {area.label}{isSelected ? ' ✓' : ''}
+                </button>
+              );
+            })}
           </div>
         </div>
 

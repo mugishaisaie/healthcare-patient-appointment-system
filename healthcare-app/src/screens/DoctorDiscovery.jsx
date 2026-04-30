@@ -1,47 +1,26 @@
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Search } from 'lucide-react';
+import { doctors } from '../data/doctors';
 
 export default function DoctorDiscovery() {
   const navigate = useNavigate();
 
-  const doctors = [
-    {
-      id: 1,
-      initials: 'AU',
-      color: 'bg-primary-500',
-      name: 'Dr. Amina Uwamahoro',
-      specialty: 'Neurologist',
-      match: '95% match',
-      rating: '4.9',
-      reviews: '120 reviews',
-      exp: '10 yrs experience',
-      available: 'Today, 12:00 PM'
-    },
-    {
-      id: 2,
-      initials: 'JP',
-      color: 'bg-indigo-500',
-      name: 'Dr. Jean-Paul Ndizeye',
-      specialty: 'General Practitioner',
-      match: '85% match',
-      rating: '4.8',
-      reviews: '85 reviews',
-      exp: '8 yrs experience',
-      available: 'Today, 4:00 PM'
-    },
-    {
-      id: 3,
-      initials: 'SM',
-      color: 'bg-orange-500',
-      name: 'Dr. Sarah Mukamana',
-      specialty: 'Internal Medicine',
-      match: '80% match',
-      rating: '4.7',
-      reviews: '150 reviews',
-      exp: '12 yrs experience',
-      available: 'Tomorrow, 9:00 AM'
-    }
-  ];
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
+  const filters = ['All', 'Neurologist', 'GP', 'Internist'];
+
+  const filteredDoctors = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return doctors.filter((doc) => {
+      const matchesFilter = activeFilter === 'All' || doc.category === activeFilter;
+      const matchesSearch =
+        !normalizedSearch ||
+        doc.name.toLowerCase().includes(normalizedSearch) ||
+        doc.specialty.toLowerCase().includes(normalizedSearch);
+      return matchesFilter && matchesSearch;
+    });
+  }, [activeFilter, searchTerm]);
 
   return (
     <div className="h-full bg-gray-50 flex flex-col font-sans relative">
@@ -59,24 +38,40 @@ export default function DoctorDiscovery() {
           <input
             type="text"
             placeholder="Search doctors, specialties..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
             className="w-full bg-white border border-gray-200 rounded-full py-2.5 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 shadow-sm"
           />
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          <button className="px-4 py-1.5 rounded-full text-xs font-medium bg-primary-500 text-white whitespace-nowrap">All</button>
-          <button className="px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap">Neurologist</button>
-          <button className="px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap">GP</button>
-          <button className="px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-gray-200 whitespace-nowrap">Internist</button>
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap ${
+                activeFilter === filter
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white text-gray-600 border border-gray-200'
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
         </div>
 
         <div className="bg-green-50 text-green-700 text-xs font-medium py-2 px-3 rounded-lg border border-green-100 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          AI matched 3 doctors for your symptoms
+          AI matched {filteredDoctors.length} doctors for your symptoms
         </div>
 
         <div className="space-y-3">
-          {doctors.map(doc => (
+          {filteredDoctors.length === 0 ? (
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center text-sm text-gray-500">
+              No doctors match your search.
+            </div>
+          ) : (
+            filteredDoctors.map(doc => (
             <div key={doc.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <div className="flex justify-between items-start mb-2">
                 <div className="flex gap-3">
@@ -106,12 +101,16 @@ export default function DoctorDiscovery() {
                 <div className="text-xs text-gray-600">
                   🕒 Next available: <span className="font-medium text-gray-800">{doc.available}</span>
                 </div>
-                <button onClick={() => navigate(`/book/${doc.id}`)} className="bg-primary-500 text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:bg-primary-600">
+                <button
+                  onClick={() => navigate(`/book/${doc.id}`, { state: { doctor: doc } })}
+                  className="bg-primary-500 text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:bg-primary-600"
+                >
                   Book Now
                 </button>
               </div>
             </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

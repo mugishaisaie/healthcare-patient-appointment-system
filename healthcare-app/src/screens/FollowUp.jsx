@@ -1,12 +1,33 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, MoreHorizontal } from 'lucide-react';
+import { doctors } from '../data/doctors';
 
 export default function FollowUp() {
   const navigate = useNavigate();
   const [toggles, setToggles] = useState({ p: true, v: true, h: false });
+  const followUpDoctor = doctors[0];
+  const followUpDate = new Date(2026, 4, 5);
+  const followUpTime = '9:00 AM';
+  const formattedFollowUpDate = followUpDate.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  });
+  const followUpLocation = followUpDoctor.hospital ?? followUpDoctor.location;
 
   const toggle = (k) => setToggles({...toggles, [k]: !toggles[k]});
+  const handleBookFollowUp = () => {
+    navigate(`/book/${followUpDoctor.id}`, {
+      state: {
+        doctor: followUpDoctor,
+        appointmentDate: followUpDate.toISOString(),
+        appointmentTime: followUpTime,
+        visitType: 'In-Person',
+        reason: 'Follow-up visit'
+      }
+    });
+  };
 
   return (
     <div className="h-full bg-gray-50 flex flex-col font-sans relative">
@@ -72,9 +93,12 @@ export default function FollowUp() {
           <div className="bg-blue-50 rounded-xl p-3 border border-blue-100 flex justify-between items-center">
             <div>
               <p className="font-bold text-blue-800 text-xs">Check-up in 7 days</p>
-              <p className="text-[10px] text-blue-600 mt-0.5">Wednesday, May 5 • King Faisal Hospital</p>
+              <p className="text-[10px] text-blue-600 mt-0.5">{formattedFollowUpDate} • {followUpLocation}</p>
             </div>
-            <button className="bg-primary-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm">
+            <button
+              onClick={handleBookFollowUp}
+              className="bg-primary-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm"
+            >
               Book
             </button>
           </div>

@@ -1,16 +1,32 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { doctors } from '../data/doctors';
 
 export default function AppointmentBooking() {
   const navigate = useNavigate();
-  const initialDate = new Date(2026, 3, 28);
+  const { doctorId } = useParams();
+  const { state } = useLocation();
+  const initialDate = (() => {
+    if (state?.appointmentDate) {
+      const parsed = new Date(state.appointmentDate);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    }
+    return new Date(2026, 3, 28);
+  })();
+  const doctor =
+    state?.doctor ??
+    doctors.find((doc) => doc.id === Number(doctorId)) ??
+    doctors[0];
   const [currentMonth, setCurrentMonth] = useState(
     () => new Date(initialDate.getFullYear(), initialDate.getMonth(), 1)
   );
   const [selectedDate, setSelectedDate] = useState(() => initialDate);
-  const [selectedTime, setSelectedTime] = useState('2:30 PM');
-  const [visitType, setVisitType] = useState('In-Person');
+  const [selectedTime, setSelectedTime] = useState(() => state?.appointmentTime ?? '2:30 PM');
+  const [visitType, setVisitType] = useState(() => state?.visitType ?? 'In-Person');
+  const [reason, setReason] = useState(() => state?.reason ?? '');
 
   const times = ['9:00 AM', '10:30 AM', '12:00 PM', '2:30 PM', '4:00 PM', '5:30 PM'];
 
@@ -71,6 +87,18 @@ export default function AppointmentBooking() {
     setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
   };
 
+  const handleConfirm = () => {
+    navigate('/confirmation', {
+      state: {
+        doctor,
+        appointmentDate: selectedDate.toISOString(),
+        appointmentTime: selectedTime,
+        visitType,
+        reason
+      }
+    });
+  };
+
   return (
     <div className="h-full bg-gray-50 flex flex-col font-sans relative">
       <div className="bg-primary-500 text-white p-4 pt-12 pb-6">
@@ -82,14 +110,14 @@ export default function AppointmentBooking() {
 
       <div className="flex-1 overflow-y-auto p-5 pb-24">
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
-            AU
+          <div className={`w-12 h-12 rounded-full ${doctor.color} text-white flex items-center justify-center font-bold text-lg shrink-0`}>
+            {doctor.initials}
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 text-sm">Dr. Amina Uwamahoro</h3>
-            <p className="text-xs text-gray-500">Neurologist</p>
+            <h3 className="font-bold text-gray-800 text-sm">{doctor.name}</h3>
+            <p className="text-xs text-gray-500">{doctor.specialty}</p>
             <p className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5">
-              📍 King Faisal Hospital, Kigali
+              📍 {doctor.location}
             </p>
           </div>
         </div>
@@ -185,12 +213,14 @@ export default function AppointmentBooking() {
             className="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs focus:outline-none focus:border-primary-500"
             placeholder="Describe your symptoms briefly..."
             rows="2"
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
           ></textarea>
         </div>
       </div>
 
       <div className="p-4 bg-white border-t border-gray-100 absolute bottom-0 w-full z-10">
-        <button onClick={() => navigate('/confirmation')} className="w-full bg-primary-500 text-white py-3.5 rounded-xl font-bold shadow-md">
+        <button onClick={handleConfirm} className="w-full bg-primary-500 text-white py-3.5 rounded-xl font-bold shadow-md">
           ✓ Confirm Appointment
         </button>
       </div>
